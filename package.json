@@ -32,7 +32,11 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "e2e:webkit": "playwright test --project=webkit",
-    "e2e:report": "playwright show-report"
+    "e2e:report": "playwright show-report",
+    "sitemap:snapshot": "python3 scripts/snapshot-sitemap.py",
+    "test:migration": "npm run build && node --test tests/migration/sitemap.test.mjs",
+    "test:migration:built": "node --test tests/migration/sitemap.test.mjs",
+    "test:migration:browser": "npm run build && playwright test -c playwright.migration.config.cjs"
   },
   "dependencies": {
     "@apollo/server": "^5.5.1",

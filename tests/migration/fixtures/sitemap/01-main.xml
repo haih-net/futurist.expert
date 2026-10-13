@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://futurist.expert/</loc>
+    <lastmod>2026-10-12T00:00:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://futurist.expert/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://futurist.expert/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://futurist.expert/en/" />
+  </url>
+  <url>
+    <loc>https://futurist.expert/en/</loc>
+    <lastmod>2026-10-12T00:00:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://futurist.expert/" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://futurist.expert/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://futurist.expert/en/" />
+  </url>
+  <url>
+    <loc>https://futurist.expert/concepts</loc>
+    <lastmod>2026-10-12T00:00:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://futurist.expert/concepts" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://futurist.expert/concepts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://futurist.expert/en/concepts" />
+  </url>
+  <url>
+    <loc>https://futurist.expert/en/concepts</loc>
+    <lastmod>2026-10-12T00:00:00.000Z</lastmod>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://futurist.expert/concepts" />
+    <xhtml:link rel="alternate" hreflang="ru" href="https://futurist.expert/concepts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://futurist.expert/en/concepts" />
+  </url>
+</urlset>

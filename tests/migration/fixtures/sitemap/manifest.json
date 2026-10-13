@@ -1,0 +1,273 @@
+{
+  "source": "https://futurist.expert/sitemap.xml",
+  "capturedAt": "2026-10-13T08:59:06.481507+00:00",
+  "sources": [
+    {
+      "url": "https://futurist.expert/sitemap.xml",
+      "file": "00-sitemap.xml",
+      "sha256": "2c2717a1decbc911df476921cb5461b112fa819f4be15f5d3238a717853469ce"
+    },
+    {
+      "url": "https://futurist.expert/sitemap/main.xml",
+      "file": "01-main.xml",
+      "sha256": "5f66499d7a90bac86624d2c4af416cc9a18a9e12858dcc4c30acee39089e296b"
+    },
+    {
+      "url": "https://futurist.expert/sitemap/concepts.xml",
+      "file": "02-concepts.xml",
+      "sha256": "ae290739e2a128cd692b208fa80c6b820a4013a1e0d8643d0ad05082d038e218"
+    }
+  ],
+  "pages": [
+    {
+      "path": "/",
+      "status": 200,
+      "target": "/"
+    },
+    {
+      "path": "/concepts",
+      "status": 200,
+      "target": "/concepts"
+    },
+    {
+      "path": "/concepts/ai-agent-vozvraschaet-prodavtsa-vnutr-tsifrovoy-torgovoy-tochki",
+      "status": 200,
+      "target": "/concepts/ai-agent-vozvraschaet-prodavtsa-vnutr-tsifrovoy-torgovoy-tochki"
+    },
+    {
+      "path": "/concepts/ai-as-reputation-arbiter",
+      "status": 200,
+      "target": "/concepts/ai-as-reputation-arbiter"
+    },
+    {
+      "path": "/concepts/ai-prodazhi-nuzhno-otsenivat-kak-sistemu-a-ne-demonstratsiyu-tekhnologii",
+      "status": 200,
+      "target": "/concepts/ai-prodazhi-nuzhno-otsenivat-kak-sistemu-a-ne-demonstratsiyu-tekhnologii"
+    },
+    {
+      "path": "/concepts/ai-uskoryaet-foresight-no-ne-zamenyaet-prakticheskiy-opyt-futurista",
+      "status": 200,
+      "target": "/concepts/ai-uskoryaet-foresight-no-ne-zamenyaet-prakticheskiy-opyt-futurista"
+    },
+    {
+      "path": "/concepts/bigtekh-delaet-spetsialista-silnee-v-proshlom",
+      "status": 200,
+      "target": "/concepts/bigtekh-delaet-spetsialista-silnee-v-proshlom"
+    },
+    {
+      "path": "/concepts/buduschee-nelzya-issledovat-tolko-iz-proshlogo",
+      "status": 200,
+      "target": "/concepts/buduschee-nelzya-issledovat-tolko-iz-proshlogo"
+    },
+    {
+      "path": "/concepts/cloud-ai-intelligence-is-managed",
+      "status": 200,
+      "target": "/concepts/cloud-ai-intelligence-is-managed"
+    },
+    {
+      "path": "/concepts/company-information-contour-for-ai",
+      "status": 200,
+      "target": "/concepts/company-information-contour-for-ai"
+    },
+    {
+      "path": "/concepts/eksperiment-stanovitsya-sposobom-issledovaniya-buduschego",
+      "status": 200,
+      "target": "/concepts/eksperiment-stanovitsya-sposobom-issledovaniya-buduschego"
+    },
+    {
+      "path": "/concepts/futurist-dolzhen-myslit-sistemami-a-ne-tekhnologiyami",
+      "status": 200,
+      "target": "/concepts/futurist-dolzhen-myslit-sistemami-a-ne-tekhnologiyami"
+    },
+    {
+      "path": "/concepts/futurist-novogo-tipa-aktivnyy-praktik",
+      "status": 200,
+      "target": "/concepts/futurist-novogo-tipa-aktivnyy-praktik"
+    },
+    {
+      "path": "/concepts/information-quality-becomes-access-level",
+      "status": 200,
+      "target": "/concepts/information-quality-becomes-access-level"
+    },
+    {
+      "path": "/concepts/izvestnoe-instrument-issledovaniya-neizvestnogo-buduschego",
+      "status": 200,
+      "target": "/concepts/izvestnoe-instrument-issledovaniya-neizvestnogo-buduschego"
+    },
+    {
+      "path": "/concepts/kompaniya-ne-mozhet-nadezhno-otsenit-tekhnologiyu-opyta-kotoroy-esche-ne-suschestvuet",
+      "status": 200,
+      "target": "/concepts/kompaniya-ne-mozhet-nadezhno-otsenit-tekhnologiyu-opyta-kotoroy-esche-ne-suschestvuet"
+    },
+    {
+      "path": "/concepts/logisticheskie-tsepochki-opredelyayut-skorost-izmeneniy",
+      "status": 200,
+      "target": "/concepts/logisticheskie-tsepochki-opredelyayut-skorost-izmeneniy"
+    },
+    {
+      "path": "/concepts/mass-ai-cost-limits-intelligence",
+      "status": 200,
+      "target": "/concepts/mass-ai-cost-limits-intelligence"
+    },
+    {
+      "path": "/concepts/model-is-not-product",
+      "status": 200,
+      "target": "/concepts/model-is-not-product"
+    },
+    {
+      "path": "/concepts/not-all-ai-equally-useful",
+      "status": 200,
+      "target": "/concepts/not-all-ai-equally-useful"
+    },
+    {
+      "path": "/concepts/progress-voznikaet-iz-pereispolzovaniya-izvestnykh-svyazey",
+      "status": 200,
+      "target": "/concepts/progress-voznikaet-iz-pereispolzovaniya-izvestnykh-svyazey"
+    },
+    {
+      "path": "/concepts/rost-proizvoditelnosti-specialistov-trebuet-razvitiya-tehnologicheskoy-sredy-biznesa",
+      "status": 200,
+      "target": "/concepts/rost-proizvoditelnosti-specialistov-trebuet-razvitiya-tehnologicheskoy-sredy-biznesa"
+    },
+    {
+      "path": "/concepts/soloprener-buduschego-eto-praktikuyuschiy-futurist",
+      "status": 200,
+      "target": "/concepts/soloprener-buduschego-eto-praktikuyuschiy-futurist"
+    },
+    {
+      "path": "/concepts/tekhnologicheskaya-vozmozhnost-ne-oznachaet-ekonomicheskuyu-zhiznesposobnost",
+      "status": 200,
+      "target": "/concepts/tekhnologicheskaya-vozmozhnost-ne-oznachaet-ekonomicheskuyu-zhiznesposobnost"
+    },
+    {
+      "path": "/concepts/zhurnal-pozvolyaet-futuristu-ne-prodavat-kazhduyu-mysl-lichno",
+      "status": 200,
+      "target": "/concepts/zhurnal-pozvolyaet-futuristu-ne-prodavat-kazhduyu-mysl-lichno"
+    },
+    {
+      "path": "/en/",
+      "status": 301,
+      "target": "/"
+    },
+    {
+      "path": "/en/concepts",
+      "status": 301,
+      "target": "/concepts"
+    },
+    {
+      "path": "/en/concepts/ai-agent-vozvraschaet-prodavtsa-vnutr-tsifrovoy-torgovoy-tochki",
+      "status": 301,
+      "target": "/concepts/ai-agent-vozvraschaet-prodavtsa-vnutr-tsifrovoy-torgovoy-tochki"
+    },
+    {
+      "path": "/en/concepts/ai-as-reputation-arbiter",
+      "status": 301,
+      "target": "/concepts/ai-as-reputation-arbiter"
+    },
+    {
+      "path": "/en/concepts/ai-prodazhi-nuzhno-otsenivat-kak-sistemu-a-ne-demonstratsiyu-tekhnologii",
+      "status": 301,
+      "target": "/concepts/ai-prodazhi-nuzhno-otsenivat-kak-sistemu-a-ne-demonstratsiyu-tekhnologii"
+    },
+    {
+      "path": "/en/concepts/ai-uskoryaet-foresight-no-ne-zamenyaet-prakticheskiy-opyt-futurista",
+      "status": 301,
+      "target": "/concepts/ai-uskoryaet-foresight-no-ne-zamenyaet-prakticheskiy-opyt-futurista"
+    },
+    {
+      "path": "/en/concepts/bigtekh-delaet-spetsialista-silnee-v-proshlom",
+      "status": 301,
+      "target": "/concepts/bigtekh-delaet-spetsialista-silnee-v-proshlom"
+    },
+    {
+      "path": "/en/concepts/buduschee-nelzya-issledovat-tolko-iz-proshlogo",
+      "status": 301,
+      "target": "/concepts/buduschee-nelzya-issledovat-tolko-iz-proshlogo"
+    },
+    {
+      "path": "/en/concepts/cloud-ai-intelligence-is-managed",
+      "status": 301,
+      "target": "/concepts/cloud-ai-intelligence-is-managed"
+    },
+    {
+      "path": "/en/concepts/company-information-contour-for-ai",
+      "status": 301,
+      "target": "/concepts/company-information-contour-for-ai"
+    },
+    {
+      "path": "/en/concepts/eksperiment-stanovitsya-sposobom-issledovaniya-buduschego",
+      "status": 301,
+      "target": "/concepts/eksperiment-stanovitsya-sposobom-issledovaniya-buduschego"
+    },
+    {
+      "path": "/en/concepts/futurist-dolzhen-myslit-sistemami-a-ne-tekhnologiyami",
+      "status": 301,
+      "target": "/concepts/futurist-dolzhen-myslit-sistemami-a-ne-tekhnologiyami"
+    },
+    {
+      "path": "/en/concepts/futurist-novogo-tipa-aktivnyy-praktik",
+      "status": 301,
+      "target": "/concepts/futurist-novogo-tipa-aktivnyy-praktik"
+    },
+    {
+      "path": "/en/concepts/information-quality-becomes-access-level",
+      "status": 301,
+      "target": "/concepts/information-quality-becomes-access-level"
+    },
+    {
+      "path": "/en/concepts/izvestnoe-instrument-issledovaniya-neizvestnogo-buduschego",
+      "status": 301,
+      "target": "/concepts/izvestnoe-instrument-issledovaniya-neizvestnogo-buduschego"
+    },
+    {
+      "path": "/en/concepts/kompaniya-ne-mozhet-nadezhno-otsenit-tekhnologiyu-opyta-kotoroy-esche-ne-suschestvuet",
+      "status": 301,
+      "target": "/concepts/kompaniya-ne-mozhet-nadezhno-otsenit-tekhnologiyu-opyta-kotoroy-esche-ne-suschestvuet"
+    },
+    {
+      "path": "/en/concepts/logisticheskie-tsepochki-opredelyayut-skorost-izmeneniy",
+      "status": 301,
+      "target": "/concepts/logisticheskie-tsepochki-opredelyayut-skorost-izmeneniy"
+    },
+    {
+      "path": "/en/concepts/mass-ai-cost-limits-intelligence",
+      "status": 301,
+      "target": "/concepts/mass-ai-cost-limits-intelligence"
+    },
+    {
+      "path": "/en/concepts/model-is-not-product",
+      "status": 301,
+      "target": "/concepts/model-is-not-product"
+    },
+    {
+      "path": "/en/concepts/not-all-ai-equally-useful",
+      "status": 301,
+      "target": "/concepts/not-all-ai-equally-useful"
+    },
+    {
+      "path": "/en/concepts/progress-voznikaet-iz-pereispolzovaniya-izvestnykh-svyazey",
+      "status": 301,
+      "target": "/concepts/progress-voznikaet-iz-pereispolzovaniya-izvestnykh-svyazey"
+    },
+    {
+      "path": "/en/concepts/rost-proizvoditelnosti-specialistov-trebuet-razvitiya-tehnologicheskoy-sredy-biznesa",
+      "status": 301,
+      "target": "/concepts/rost-proizvoditelnosti-specialistov-trebuet-razvitiya-tehnologicheskoy-sredy-biznesa"
+    },
+    {
+      "path": "/en/concepts/soloprener-buduschego-eto-praktikuyuschiy-futurist",
+      "status": 301,
+      "target": "/concepts/soloprener-buduschego-eto-praktikuyuschiy-futurist"
+    },
+    {
+      "path": "/en/concepts/tekhnologicheskaya-vozmozhnost-ne-oznachaet-ekonomicheskuyu-zhiznesposobnost",
+      "status": 301,
+      "target": "/concepts/tekhnologicheskaya-vozmozhnost-ne-oznachaet-ekonomicheskuyu-zhiznesposobnost"
+    },
+    {
+      "path": "/en/concepts/zhurnal-pozvolyaet-futuristu-ne-prodavat-kazhduyu-mysl-lichno",
+      "status": 301,
+      "target": "/concepts/zhurnal-pozvolyaet-futuristu-ne-prodavat-kazhduyu-mysl-lichno"
+    }
+  ]
+}

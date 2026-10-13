@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://haih.site/sitemap.xml
+Sitemap: https://futurist.expert/sitemap.xml

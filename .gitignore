@@ -17,3 +17,6 @@ playwright-report/
 test-results/
 
 !docker/.env.example
+
+# Локальные кеши установки и журналы проверок.
+.cache/

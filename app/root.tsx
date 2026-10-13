@@ -1,11 +1,13 @@
 import { Statistics } from './components/Statistics'
 import { errorPageStatusCode } from './components/Statistics/status'
-import { HtmlStyled } from './components/Layout/styles'
-import { SeoHeaders, unavailableSeoMeta } from './components/seo/SeoHeaders'
+import type * as React from 'react'
+import { DocumentStyled as HtmlStyled } from './Custom/components/SiteLayout/styles'
+import { Meta as SeoHeaders } from 'react-router'
+import { unavailableMeta as unavailableSeoMeta } from './Custom/seo'
 
 export const meta = unavailableSeoMeta
 import type { ReactNode } from 'react'
-import { Layout as SiteLayout } from './components/Layout'
+import { SiteLayout } from './Custom/components/SiteLayout'
 import {
   Links,
   Outlet,
@@ -17,13 +19,13 @@ import {
 
 const betterlyticsId = import.meta.env.BETTERLYTICS_SITE_ID
 
-export function Layout({ children }: { children: ReactNode }) {
+export const Layout: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
-    <HtmlStyled lang="en">
+    <HtmlStyled lang="ru">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <SeoHeaders />
         <Links />
         {betterlyticsId && (
@@ -43,7 +45,7 @@ export function Layout({ children }: { children: ReactNode }) {
     </HtmlStyled>
   )
 }
-export default function App() {
+const App: React.FC = () => {
   return (
     <>
       <Outlet />
@@ -52,18 +54,20 @@ export default function App() {
   )
 }
 
-export function ErrorBoundary() {
+export { App as default }
+
+export const ErrorBoundary: React.FC = () => {
   const error = useRouteError()
   return (
     <>
       <Statistics statusCode={errorPageStatusCode(error)} />
       <h1 tabIndex={-1}>
         {isRouteErrorResponse(error)
-          ? `${error.status} ${error.statusText}`
-          : 'Something went wrong'}
+          ? `${error.status} — Страница недоступна`
+          : 'Не удалось открыть страницу'}
       </h1>
-      <p>Please reload the page to retry.</p>
-      <a href="/">Return home</a>
+      <p>Обновите страницу или перейдите к каталогу концептов.</p>
+      <a href="/">На главную</a>
     </>
   )
 }

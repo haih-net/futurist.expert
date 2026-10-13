@@ -1,3 +1,16 @@
+# futurist.expert — перенос сайта
+
+Сайт содержит 26 русских страниц futurist.expert в файлах app/Custom/content/, без базы данных. Кастомный layout, каталог и страницы статей находятся в app/Custom/. Английские адреса перенаправляются на русские через HTTP 301.
+
+Проверка всех 50 адресов исходного sitemap с запуском локального сервера:
+
+```bash
+npm run test:migration
+```
+
+[Снимок sitemap, ожидаемые редиректы и порядок проверок](tests/migration/README.md).
+Ниже сохранена унаследованная документация основы.
+
 # HAIH Site
 
 **Build better software with AI — by starting from requirements, not frameworks.**

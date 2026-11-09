@@ -18,6 +18,8 @@ const concepts: PageSummary[] = pages
   }))
 export const getPage = (path: string): PageData => {
   const page = pages.find((entry) => entry.path === path)
-  if (!page) throw new Response('Страница не найдена', { status: 404 })
+  if (!page) {
+    throw new Response('Страница не найдена', { status: 404 })
+  }
   return { page, concepts }
 }

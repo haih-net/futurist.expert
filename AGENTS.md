@@ -3,12 +3,12 @@
 Этот репозиторий создан для переноса futurist.expert на основе website-template.
 Указания ниже уточняют унаследованные инструкции основы для этого сайта:
 
-- Сайт работает без базы данных: содержание и конфигурация хранятся в файлах репозитория. Контракт переноса: `tests/migration/fixtures/sitemap/manifest.json`, проверка всех адресов на локальном сервере: `npm run test:migration`.
+- Контент страниц хранится в файлах репозитория `app/Custom/content/*.json`. Чат и служебные функции используют БД и серверную инфраструктуру website-template; ограничение «без базы данных» к ним не относится. Контракт переноса: `tests/migration/fixtures/sitemap/manifest.json`, проверка всех адресов на локальном сервере: `npm run test:migration`.
 - На текущем этапе реализуется только русская версия. Новый контент сайта писать на русском языке.
 - Английскую версию и переключатель языков не переносить. Адреса `/en/...` должны перенаправляться на соответствующую русскую версию; карта адресов будет подготовлена при переносе.
 - План и состояние проекта: `/shared/www/marketing/app/Custom/pages/Wiki/pages/projects/futurist.expert/`.
 - Основа скопирована с полной историей из локального website-template, коммит `4c580b97425e2fa4b14e46f3ca7d65042e9471e9`. Незакоммиченные изменения основы не перенесены.
-- `upstream`: `https://github.com/haih-net/website-template.git`. Собственного удалённого `origin` пока нет.
+- `upstream`: локальный `../website-template/`. `origin`: `git@github.com:haih-net/futurist.expert.git`.
 - Содержимое futurist.expert находится в app/Custom/content/*.json, layout и страницы — в app/Custom/. Перенесены 26 русских страниц; структура и проверки описаны в app/Custom/README.md. Сервер и процедура публикации ещё не определены.
 
 # HAIH Site — Project Instructions

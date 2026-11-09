@@ -4,11 +4,21 @@ import { Link } from 'react-router'
 import type { ContentNode, PageSummary } from '../../interfaces'
 import { Catalog } from '../SiteLayout/styles'
 
+function renderNodes(nodes: (ContentNode | string)[]): React.ReactNode[] {
+  const occurrences = new Map<string, number>()
+  return nodes.map((node) => {
+    const content = JSON.stringify(node)
+    const occurrence = occurrences.get(content) ?? 0
+    occurrences.set(content, occurrence + 1)
+    return <Node key={`${content}:${occurrence}`} node={node} />
+  })
+}
+
 const Node: React.FC<{ node: ContentNode | string }> = ({ node }) => {
-  if (typeof node === 'string') return <>{node}</>
-  const children = node.children.map((child, index) => (
-    <Node key={index} node={child} />
-  ))
+  if (typeof node === 'string') {
+    return <>{node}</>
+  }
+  const children = renderNodes(node.children)
   const { colspan, rowspan, ...attrs } = node.attrs
   const props = {
     ...attrs,
@@ -26,13 +36,7 @@ const Node: React.FC<{ node: ContentNode | string }> = ({ node }) => {
 }
 export const Content: React.FC<{ nodes: (ContentNode | string)[] }> = ({
   nodes,
-}) => (
-  <div className="prose">
-    {nodes.map((node, index) => (
-      <Node key={index} node={node} />
-    ))}
-  </div>
-)
+}) => <div className="prose">{renderNodes(nodes)}</div>
 
 export const ConceptCards: React.FC<{
   pages: PageSummary[]

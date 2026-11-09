@@ -45,9 +45,7 @@
           "attrs": {
             "href": "https://artificialanalysis.ai/articles/artificial-analysis-intelligence-index-v4-1-1"
           },
-          "children": [
-            "Artificial Analysis Intelligence Index"
-          ]
+          "children": ["Artificial Analysis Intelligence Index"]
         },
         "."
       ]
@@ -87,9 +85,7 @@
           "attrs": {
             "href": "https://conceptica.world/concepts/glavnaya-oshibka-obscheniya-schitat-ponimanie-dostignutym-slishkom-rano"
           },
-          "children": [
-            "Conceptica"
-          ]
+          "children": ["Conceptica"]
         },
         " особенно важна для эпохи ИИ: понимание часто считают достигнутым слишком рано. Система выдала связный ответ — и человеку кажется, что она поняла задачу. Но связность текста и качество понимания — не одно и то же."
       ]
@@ -119,17 +115,13 @@
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "каким именно ИИ;"
-          ]
+          "children": ["каким именно ИИ;"]
         },
         "\n",
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "для каких задач;"
-          ]
+          "children": ["для каких задач;"]
         },
         "\n",
         {
@@ -143,17 +135,13 @@
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "что происходит, когда ему не хватает информации;"
-          ]
+          "children": ["что происходит, когда ему не хватает информации;"]
         },
         "\n",
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "умеет ли он различать факт, гипотезу и оценку;"
-          ]
+          "children": ["умеет ли он различать факт, гипотезу и оценку;"]
         },
         "\n",
         {
@@ -185,9 +173,7 @@
           "attrs": {
             "href": "/concepts/model-is-not-product"
           },
-          "children": [
-            "«Модель — не продукт»"
-          ]
+          "children": ["«Модель — не продукт»"]
         },
         "."
       ]

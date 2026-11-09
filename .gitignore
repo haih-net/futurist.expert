@@ -1,3 +1,5 @@
+storage/*
+uploads/*
 node_modules/
 build/
 .react-router/
@@ -20,3 +22,4 @@ test-results/
 
 # Локальные кеши установки и журналы проверок.
 .cache/
+docker/supabase/data/

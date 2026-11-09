@@ -61,9 +61,7 @@
           "attrs": {
             "href": "https://blog.google/products-and-platforms/products/search/search-io-2026/"
           },
-          "children": [
-            "Google о масштабе AI Mode"
-          ]
+          "children": ["Google о масштабе AI Mode"]
         },
         ". Одновременно Alphabet в 2026 году резко увеличил капитальные расходы на инфраструктуру ИИ; Reuters сообщал о планируемых расходах порядка $195–205 млрд. ",
         {
@@ -71,9 +69,7 @@
           "attrs": {
             "href": "https://www.reuters.com/business/google-quarterly-cloud-revenue-growth-beats-expectations-2026-07-22/"
           },
-          "children": [
-            "Reuters"
-          ]
+          "children": ["Reuters"]
         },
         "."
       ]
@@ -171,9 +167,7 @@
           "attrs": {
             "href": "/concepts/information-quality-becomes-access-level"
           },
-          "children": [
-            "«Качество информации становится уровнем доступа»"
-          ]
+          "children": ["«Качество информации становится уровнем доступа»"]
         },
         "."
       ]

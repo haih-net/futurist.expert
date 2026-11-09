@@ -1,3 +1,7 @@
+server/database/data
+storage
+uploads
+generated
 /node_modules
 /build
 /.react-router
@@ -7,3 +11,10 @@ package-lock.json
 coverage/
 playwright-report/
 test-results/
+
+docker/mailserver/mail-data/
+docker/mailserver/mail-state/
+docker/mailserver/mail-logs/
+docker/mailserver/config/
+
+docker/supabase/data/

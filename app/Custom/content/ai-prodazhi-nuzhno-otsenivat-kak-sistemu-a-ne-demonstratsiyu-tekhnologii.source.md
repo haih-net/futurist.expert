@@ -23,4 +23,3 @@ AI уже способен поддерживать сложный коммер�
 Прикладная проекция для независимого бизнеса — [«Солопренеру нужен не только сайт, но и продавец» на solopreneur.prof](https://solopreneur.prof/concepts/solopreneru-nuzhen-ne-tolko-sayt-no-i-prodavets).
 
 Вернуться к главной футуристической заметке: [AI-агент возвращает продавца внутрь цифровой торговой точки](/concepts/ai-agent-vozvraschaet-prodavtsa-vnutr-tsifrovoy-torgovoy-tochki).
-

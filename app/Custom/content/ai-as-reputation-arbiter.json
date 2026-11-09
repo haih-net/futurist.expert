@@ -19,9 +19,7 @@
         {
           "tag": "strong",
           "attrs": {},
-          "children": [
-            "оценивает участников"
-          ]
+          "children": ["оценивает участников"]
         },
         "."
       ]
@@ -51,9 +49,7 @@
         {
           "tag": "strong",
           "attrs": {},
-          "children": [
-            "репутационным арбитром"
-          ]
+          "children": ["репутационным арбитром"]
         },
         "."
       ]
@@ -78,9 +74,7 @@
     {
       "tag": "p",
       "attrs": {},
-      "children": [
-        "Право уже начинает сталкиваться с этим переходом."
-      ]
+      "children": ["Право уже начинает сталкиваться с этим переходом."]
     },
     "\n",
     {
@@ -93,9 +87,7 @@
           "attrs": {
             "href": "https://www.loc.gov/item/global-legal-monitor/2026-07-17/germany-court-holds-google-liable-for-incorrect-ai-overviews/"
           },
-          "children": [
-            "Обзор решения Библиотеки Конгресса США"
-          ]
+          "children": ["Обзор решения Библиотеки Конгресса США"]
         },
         "."
       ]
@@ -111,9 +103,7 @@
           "attrs": {
             "href": "https://www.die-medienanstalten.de/presse/pressemitteilungen/zak-bescheide-ki-angebote-google-perplexity/"
           },
-          "children": [
-            "Решение ZAK"
-          ]
+          "children": ["Решение ZAK"]
         },
         ". В связанном правовом исследовании сформулирован ещё более общий принцип: когда ИИ смешивает, сокращает и заново формулирует сведения, итоговое высказывание приобретает самостоятельный характер. ",
         {
@@ -121,9 +111,7 @@
           "attrs": {
             "href": "https://www.die-medienanstalten.de/service/gutachten/ki-suchmaschinen-2/"
           },
-          "children": [
-            "Исследование немецких медиарегуляторов"
-          ]
+          "children": ["Исследование немецких медиарегуляторов"]
         },
         "."
       ]
@@ -147,9 +135,7 @@
           "attrs": {
             "href": "https://law.justia.com/cases/federal/district-courts/new-york/nysdce/1%3A2024cv07984/630270/65/"
           },
-          "children": [
-            "Материалы дела"
-          ]
+          "children": ["Материалы дела"]
         },
         "."
       ]
@@ -226,33 +212,25 @@
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "отделить подтверждённые события от интерпретаций;"
-          ]
+          "children": ["отделить подтверждённые события от интерпретаций;"]
         },
         "\n",
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "показать источники ключевых утверждений;"
-          ]
+          "children": ["показать источники ключевых утверждений;"]
         },
         "\n",
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "явно назвать то, чего она не может знать;"
-          ]
+          "children": ["явно назвать то, чего она не может знать;"]
         },
         "\n",
         {
           "tag": "li",
           "attrs": {},
-          "children": [
-            "перечислить альтернативные объяснения поведения;"
-          ]
+          "children": ["перечислить альтернативные объяснения поведения;"]
         },
         "\n",
         {
@@ -284,9 +262,7 @@
           "attrs": {
             "href": "/concepts/not-all-ai-equally-useful"
           },
-          "children": [
-            "«Не все ИИ одинаково полезны»"
-          ]
+          "children": ["«Не все ИИ одинаково полезны»"]
         },
         ": разные системы действительно по-разному работают с неопределённостью и спорными мотивами. А ",
         {
@@ -294,9 +270,7 @@
           "attrs": {
             "href": "https://conceptica.world/concepts/glavnaya-oshibka-obscheniya-schitat-ponimanie-dostignutym-slishkom-rano"
           },
-          "children": [
-            "Conceptica"
-          ]
+          "children": ["Conceptica"]
         },
         " помогает увидеть сам механизм ошибки: убедительная интерпретация легко создаёт ощущение, что понимание уже достигнуто."
       ]

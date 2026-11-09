@@ -2,11 +2,16 @@ services:
   app:
     build:
       context: ../
+      args:
+        VITE_CLIENT_CERT_LOGIN: ${VITE_CLIENT_CERT_LOGIN:-false}
     env_file:
       - .env
     init: true
     volumes:
       - ../shared:/app/shared
+      - ../uploads:/app/uploads
+      - ../storage:/app/storage
+      - ../server/database/data:/app/server/database/data
     networks:
       default:
         aliases:
@@ -21,13 +26,32 @@ services:
       monitoring.logs: 'true'
       monitoring.site: haih.site
     environment:
+      DATABASE_FILENAME: ${DATABASE_FILENAME:-/app/server/database/data/database.sqlite}
       METRICS_HOST: 0.0.0.0
       METRICS_PORT: '9464'
+  supabase:
+    image: supabase/postgres:15.1.0.147
+    volumes:
+      - ./supabase/data:/var/lib/postgresql/data
+      # - ./supabase/init-data.sh:/docker-entrypoint-initdb.d/init-data.sh
+    environment:
+      - POSTGRES_PASSWORD=${SUPABASE_DB_PASSWORD:-your_supabase_password}
+      - POSTGRES_DB=${SUPABASE_DB_NAME:-postgres}
+    env_file:
+      - .env
+    healthcheck:
+      test: pg_isready -U postgres -h localhost
+      interval: 5s
+      timeout: 5s
+      retries: 10
   traefik:
     image: traefik:v3.6.1
+    environment:
+      CLIENT_CERT_APP_CONTAINER: ${COMPOSE_PROJECT_NAME}-app-1
     volumes:
       - ${TRAEFIK_STATIC_CONFIG:-./traefik/traefik.yml}:/etc/traefik/traefik.yml:ro
       - ${TRAEFIK_DYNAMIC_DIR:-./traefik/dynamic/local}:/etc/traefik/dynamic:ro
+      - ../storage/client-certificate/routes:/etc/traefik/dynamic/client-login:ro
       - ./traefik/logs:/var/log/traefik
       - ./traefik/certs:/etc/traefik/certs
     networks:
@@ -142,6 +166,34 @@ services:
     depends_on:
       - prometheus
       - loki
+  mailserver:
+    image: ghcr.io/docker-mailserver/docker-mailserver:latest
+    hostname: ${MAIL_HOSTNAME:-mail.localhost}
+    domainname: ${MAIL_DOMAIN:-localhost}
+    volumes:
+      - ./mailserver/mail-data:/var/mail
+      - ./mailserver/mail-state:/var/mail-state
+      - ./mailserver/mail-logs:/var/log/mail
+      - ./mailserver/config:/tmp/docker-mailserver
+    environment:
+      - ENABLE_SPAMASSASSIN=${MAIL_ENABLE_SPAMASSASSIN:-0}
+      - ENABLE_CLAMAV=${MAIL_ENABLE_CLAMAV:-0}
+      - ENABLE_FAIL2BAN=${MAIL_ENABLE_FAIL2BAN:-0}
+      - ENABLE_POSTGREY=${MAIL_ENABLE_POSTGREY:-0}
+      - ONE_DIR=1
+      - ENABLE_POP3=${MAIL_ENABLE_POP3:-0}
+      - ENABLE_IMAP=${MAIL_ENABLE_IMAP:-1}
+      - SMTP_ONLY=${MAIL_SMTP_ONLY:-0}
+      - SSL_TYPE=${MAIL_SSL_TYPE:-}
+      - PERMIT_DOCKER=${MAIL_PERMIT_DOCKER:-connected-networks}
+      - POSTFIX_INET_PROTOCOLS=ipv4
+      - DEFAULT_RELAY_HOST=${MAIL_RELAY_HOST:-}
+    cap_add:
+      - NET_ADMIN
+      - SYS_PTRACE
+
+  mailhog:
+    image: mailhog/mailhog
 volumes:
   varnish-cache: null
   prometheus-data: null

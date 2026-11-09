@@ -54,7 +54,7 @@ export const pageMeta = ({ page, concepts }: PageData): MetaDescriptor[] => {
         : {}),
     },
   ]
-  if (page.path !== '/')
+  if (page.path !== '/') {
     graph.push({
       '@type': 'BreadcrumbList',
       '@id': `${url}#breadcrumbs`,
@@ -65,7 +65,8 @@ export const pageMeta = ({ page, concepts }: PageData): MetaDescriptor[] => {
         item: origin + crumb.path,
       })),
     })
-  if (page.path === '/concepts')
+  }
+  if (page.path === '/concepts') {
     graph.push({
       '@type': 'ItemList',
       numberOfItems: concepts.length,
@@ -76,6 +77,7 @@ export const pageMeta = ({ page, concepts }: PageData): MetaDescriptor[] => {
         url: origin + entry.path,
       })),
     })
+  }
   return [
     { title },
     { name: 'description', content: page.description },

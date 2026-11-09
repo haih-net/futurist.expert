@@ -87,9 +87,7 @@
           "attrs": {
             "href": "https://modx.club/concepts/modx-is-legacy"
           },
-          "children": [
-            "MODX Club"
-          ]
+          "children": ["MODX Club"]
         },
         " подробно разобрано, почему работающая legacy-система может оставаться полезным бизнес-активом и одновременно становиться тормозом для дальнейшего развития. Там же показана практическая стратегия: не разрушать работающий бизнес big-bang rewrite, а постепенно выводить legacy из критического пути."
       ]
@@ -106,9 +104,7 @@
     {
       "tag": "h2",
       "attrs": {},
-      "children": [
-        "Практический кейс"
-      ]
+      "children": ["Практический кейс"]
     },
     "\n",
     {
@@ -121,9 +117,7 @@
           "attrs": {
             "href": "https://fi1osof.ru/concepts/vietnamguru-ru-i-vietnamguru-travel-putevoditel-i-geo-kanal"
           },
-          "children": [
-            "VietnamGuru"
-          ]
+          "children": ["VietnamGuru"]
         },
         " и модернизации ",
         {
@@ -131,9 +125,7 @@
           "attrs": {
             "href": "https://fi1osof.ru/concepts/bizneshelper-ru-modernizatsiya-i-migratsiya-na-haih-cms"
           },
-          "children": [
-            "bizneshelper.ru"
-          ]
+          "children": ["bizneshelper.ru"]
         },
         ". В обоих проектах важным шагом стала унификация содержательной модели вокруг универсальных Concepts: вместо множества специализированных схем появляется единый интерфейс, поверх которого могут одинаково работать CMS, автоматизация и AI-агенты."
       ]

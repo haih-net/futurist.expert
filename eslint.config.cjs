@@ -10,6 +10,17 @@ const unusedImports = require('eslint-plugin-unused-imports')
 module.exports = [
   {
     ignores: [
+      '.cache/**',
+      'server/database/data/**',
+      'docker/supabase/data/**',
+      'docker/mailserver/mail-data/**',
+      'docker/mailserver/mail-state/**',
+      'docker/mailserver/mail-logs/**',
+      'docker/mailserver/config/**',
+      'storage/**',
+      'uploads/**',
+      'project/**',
+      '**/generated/**',
       'node_modules/**',
       'coverage/**',
       'playwright-report/**',
@@ -138,6 +149,25 @@ module.exports = [
     },
     rules: {
       '@typescript-eslint/no-deprecated': 'off',
+    },
+  },
+  {
+    files: ['tests/migration/browser.spec.mjs'],
+    languageOptions: {
+      globals: {
+        document: 'readonly',
+        window: 'readonly',
+      },
+    },
+  },
+  {
+    files: ['tests/migration/sitemap.test.mjs'],
+    languageOptions: {
+      globals: {
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        AbortSignal: 'readonly',
+      },
     },
   },
 ]

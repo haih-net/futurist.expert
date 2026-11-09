@@ -35,24 +35,53 @@ function serveShared(): Plugin {
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    build: { assetsDir: env.BUILD_ASSETS_DIR || 'assets' },
     resolve: {
       alias: {
         app: resolve(import.meta.dirname, 'app'),
+        server: resolve(import.meta.dirname, 'server'),
       },
     },
     plugins: [
       wyw({ include: ['**/*.{ts,tsx}'] }),
       // React Router owns the application build pipeline, not the test runner.
-      !process.env.VITEST && reactRouter(),
+      !process.env.VITEST && !process.env.STORYBOOK && reactRouter(),
       serveShared(),
     ],
     server: {
+      watch: {
+        ignored: [
+          resolve(import.meta.dirname, 'server/database/data/**'),
+          resolve(import.meta.dirname, 'build/**'),
+          resolve(import.meta.dirname, 'shared/**'),
+          resolve(import.meta.dirname, 'storage/**'),
+          resolve(import.meta.dirname, 'uploads/**'),
+          resolve(import.meta.dirname, 'docker/**'),
+        ],
+      },
+      fs: {
+        deny: [
+          '.env',
+          '.env.*',
+          '*.{crt,pem}',
+          '**/.git/**',
+          '**/storage/**',
+          '**/docker/traefik/certs/**',
+          '**/server/database/data/**',
+        ],
+      },
       allowedHosts: ['haih.localhost'],
       ws: { path: '/__vite_hmr' },
     },
     define: {
-      'import.meta.env.BETTERLYTICS_SITE_ID': JSON.stringify(
-        env.BETTERLYTICS_SITE_ID || '',
+      'import.meta.env.NEXT_PUBLIC_SITE_SIGNUP_STRATEGY': JSON.stringify(
+        env.NEXT_PUBLIC_SITE_SIGNUP_STRATEGY || '',
+      ),
+      'process.env.NEXT_PUBLIC_CRYPTO_ENABLED': JSON.stringify(
+        env.NEXT_PUBLIC_CRYPTO_ENABLED || 'false',
+      ),
+      'process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME': JSON.stringify(
+        env.NEXT_PUBLIC_TELEGRAM_BOT_NAME || '',
       ),
     },
   }

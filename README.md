@@ -42,6 +42,13 @@ The website you see is its own proof. Every architectural decision, every depend
 | **Proxy**     | Traefik 3                   | TLS termination, routing, load balancing  |
 | **Container** | Docker Compose              | Reproducible environments                 |
 
+## Static files in shared
+
+`shared/` is an untracked directory for static files (only `.gitkeep` is tracked).
+Do not place components, validation schemas, or other application source code there.
+Keep client code beside its owning component in `app/` and server code beside its
+owning entity in `server/`.
+
 ## Quick Start
 
 Use Node.js 22.22.3 (the Docker image is pinned to this version).
@@ -56,6 +63,13 @@ npm run dev
 npm run build
 npm start
 # → http://127.0.0.1:3000
+```
+
+Build assets use the `assets` directory by default. Set `BUILD_ASSETS_DIR` in `.env`
+or when running the build to override it, for example:
+
+```bash
+BUILD_ASSETS_DIR=site-assets npm run build
 ```
 
 ## Docker
@@ -182,6 +196,22 @@ This isn't methodology theater. It's how we actually build — and how AI assist
 
 The site includes an illustrated homepage, Solutions and a blog. The current integration combines prerendering, hydration, SPA navigation, route bundles, request-time SSR and a GraphQL API. See the test commands below for reproducible checks; production cache behavior and development HMR require checks against their actual endpoints.
 
+React Router's root middleware creates a request context for each HTTP request.
+Loaders obtain Apollo through `getRequestApollo(context)`: the first call creates
+the client, and subsequent calls reuse it, including concurrent loaders. Server
+rendering uses the same client through `RequestApolloContext`. Middleware stops
+the client when request handling finishes, including errors and redirects;
+clients and authorization headers are never shared between HTTP requests.
+
+The root loader exposes one `initialApolloState` getter, evaluated when completed
+loader data is rendered or serialized, so it includes the results of parallel
+loaders. Page loaders return their page properties without separate cache
+snapshots. The browser merges the root snapshot into its persistent Apollo cache
+on hydration and SPA navigation. Context creation and cache inspection alone do
+not instantiate Apollo; the first loader or rendering consumer requesting the
+client does. Run `npx vitest run app/request/context.test.ts` to check lifecycle,
+request isolation, SSR reuse and SPA data serialization.
+
 ## License
 
 See repository for license details.
@@ -200,21 +230,62 @@ The shell uses mobile-first Linaria styled components from colocated `styles.ts`
 
 The [monitoring runbook](docker/monitoring/README.md) describes the production-artifact preview, Grafana dashboard, internal per-site probes, request/application logs and optional email/Telegram alerts. The installation is shared by sites behind one Traefik and uses an explicit site registry. [Verification results](docker/monitoring/verification.md) distinguish the local checks from unverified production behavior. Request filtering is deferred.
 
+## Wallet sign-in
+
+`/signin` supports passwords and MetaMask. Wallet authentication uses
+`ethAccountNonce` and `authEthAccount`, the existing `User`, `EthAccount` and
+`Token` tables, and the server's `JWT_SECRET`. Signatures are checked with
+[ethers verifyMessage](https://docs.ethers.org/v6/api/hashing/#verifyMessage).
+Challenges expire after five minutes and are consumed transactionally on use.
+No blockchain transaction or RPC service is required.
+
+The registration policy matches the old site: an existing linked wallet can
+sign in regardless of `NEXT_PUBLIC_SITE_SIGNUP_STRATEGY`. A new wallet requires
+a valid stored `Referrer` JWT unless that variable is exactly `ANY`. Invalid,
+revoked or expired invitations are rejected even in `ANY` mode. Invitation links
+use `/signin?referrerToken=...`; no separate registration page is enabled.
+The server reads the policy at runtime. An authenticated user can link a new
+wallet, but cannot take a wallet from another account.
+
+The auth tests use an isolated in-memory SQLite database and need no external service:
+
+```bash
+npx vitest run server/schema/types/EthAccount/auth.test.ts
+npx vitest run app/Custom/components/Auth/MetaMaskAuth/index.test.tsx
+npx playwright test tests/e2e/signin.spec.ts --project=chromium --project=mobile-chromium
+```
+
+Browser tests simulate the injected wallet and GraphQL responses. They verify
+session refresh, bearer headers, redirect and mobile layout; they do not replace
+a manual check with the real MetaMask extension.
+
+## Client certificate sign-in
+
+Each site can enable certificate sign-in alongside its existing sign-in methods. Traefik requests an optional client certificate during the site’s HTTPS handshake, so the browser may prompt when the site first opens. Visitors can continue without a certificate. The sign-in button sends a POST to the same site and receives the usual JWT. Linking a key sends the current Bearer token with the POST. The application checks the certificate’s public key against the site’s allowlist in `storage/client-certificate/authorized-keys.pem` before granting access.
+
+- **Link a key to an existing account.** Sign in with any supported method, open your profile and link your certificate. Each key can be linked once per site. Attempting to link it again, even to the same account, returns HTTP 409.
+- **Sign in with a linked key.** Select certificate sign-in on `/signin` to access the linked account with its current permissions. Blocked accounts are denied access.
+- **Create the first administrator.** An allowlisted, unlinked key creates a passwordless account with `sudo = true` only if the database has no sudo user. If one already exists, the confirmation form still appears, but confirming (`force=true`) currently returns HTTP 403. Cancel, sign in to the intended account and link the key from its profile.
+
+To reuse one certificate across sites, add its public key to each clone’s allowlist and link it separately on each site. Keep the private key on the client. In each clone’s `docker/.env`, set `VITE_CLIENT_CERT_LOGIN=true` before building and pass the same value to the running app (Compose loads it from `docker/.env`). To disable both certificate endpoints, set the value to `false` and recreate the app container. Rebuild the frontend to hide the buttons. Generate the route with `node scripts/configure-certificate-route.mjs --local` for development or pass `--host <site-domain>` and your HTTPS entry point for deployment. Install it on the Traefik instance that terminates TLS for that site. The standard Compose files support this setup. [Local setup, browser import and deployment guide (Russian)](docker/traefik/CERTIFICATE-LOGIN.md)
+
+Run the server-side certificate sign-in tests with `npm test -- server/middleware/clientCertificate/index.test.ts`.
+
 ## Tests
 
-| Command                          | Scope and prerequisites                                                                                                                       |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm test`                       | All unit tests; no build, Docker or running server required.                                                                                  |
-| `npm run test:watch`             | Unit tests in watch mode.                                                                                                                     |
-| `npm run test:coverage`          | Unit coverage in the terminal and `coverage/`.                                                                                                |
-| `npm run test:integration`       | Builds the site, then checks generated SEO/SSR output, monitoring configuration generation and GraphQL metrics with isolated local listeners. |
-| `npm run test:integration:watch` | Watches integration tests; run `npm run build` first and rebuild after changing page/build inputs.                                            |
-| `npm run test:integration:stack` | HTTP/cache and monitoring checks against an already running production preview stack.                                                         |
-| `npm run e2e`                    | Playwright: Chromium, WebKit and mobile Chromium; builds and starts the production Node server automatically.                                 |
-| `npm run e2e:webkit`             | Only the WebKit browser project.                                                                                                              |
-| `npm run e2e:report`             | Opens the last Playwright HTML report.                                                                                                        |
+| Command                          | Scope and prerequisites                                                                                                                                            |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npm test`                       | All unit tests; no build, Docker or running server required.                                                                                                       |
+| `npm run test:watch`             | Unit tests in watch mode.                                                                                                                                          |
+| `npm run test:coverage`          | Unit coverage in the terminal and `coverage/`.                                                                                                                     |
+| `npm run test:integration`       | Builds the site, then checks generated SEO/SSR output, monitoring configuration generation, statistics delivery and GraphQL metrics with isolated local listeners. |
+| `npm run test:integration:watch` | Watches integration tests; run `npm run build` first and rebuild after changing page/build inputs.                                                                 |
+| `npm run test:integration:stack` | HTTP/cache and monitoring checks against an already running production preview stack.                                                                              |
+| `npm run e2e`                    | Playwright: desktop and mobile Chromium; builds and starts the production Node server automatically.                                                               |
+| `npm run e2e:webkit`             | Only the WebKit browser project.                                                                                                                                   |
+| `npm run e2e:report`             | Opens the last Playwright HTML report.                                                                                                                             |
 
-Install browser binaries once with `npx playwright install chromium webkit` (Linux hosts may also need `npx playwright install-deps chromium webkit`). Playwright owns port 4317 and fails if it is already occupied. To test an existing server or the real proxy/cache path, supply `PLAYWRIGHT_BASE_URL`; in that mode it does not build or start a server:
+Install Chromium once with `npx playwright install chromium` (Linux hosts may also need `npx playwright install-deps chromium`). WebKit is optional: install it with `npx playwright install webkit` and its Linux dependencies with `npx playwright install-deps webkit`, then run `npm run e2e:webkit`. Playwright owns port 4317 and fails if it is already occupied. To test an existing server or the real proxy/cache path, supply `PLAYWRIGHT_BASE_URL`; in that mode it does not build or start a server:
 
 ```bash
 PLAYWRIGHT_BASE_URL=http://haih.localhost npm run e2e
@@ -223,6 +294,221 @@ TEST_URL=http://haih.localhost MONITORING_TEST_URL=http://127.0.0.1:18080 GRAFAN
 
 Stack tests require the [monitoring preview](docker/monitoring/README.md), its provisioned Grafana password file, and a `TEST_URL` routed through Traefik and Varnish. They are kept separate from local integration tests because they require external infrastructure. The suite fails when that infrastructure is unavailable; it does not silently skip checks. Failure injection and notification fixtures remain explicit `test:monitoring:failure` and `test:monitoring:notifications` commands and are never part of automatic test discovery.
 
-Add unit tests under `tests/unit/`, or colocate `*.test.ts` / `*.test.tsx` in `app/` (`*.test.ts` in `server/`). Put local integration tests in `tests/integration/`, stack checks in `tests/stack/`, and browser `*.spec.ts` files in `tests/e2e/`. Each runner discovers its own suite. Unit tests currently use the Node environment; browser behavior belongs in Playwright. Configurations use CommonJS exports to avoid adding default exports. Coverage measures the configured SEO and server source scope; it is unit coverage, not combined integration/browser coverage.
+Add unit tests under `tests/unit/`, or colocate `*.test.ts` / `*.test.tsx` in `app/` (`*.test.ts` in `server/`). Put local integration tests in `tests/integration/`, stack checks in `tests/stack/`, and browser `*.spec.ts` files in `tests/e2e/`. Each runner discovers its own suite. The default test environment is Node; individual component tests can opt into jsdom. Browser scenarios run in Playwright. Configuration entry points use CommonJS exports, while the shared factory uses a named ESM export. Coverage measures the configured SEO and server source scope; it is unit coverage, not combined integration/browser coverage.
 
-Playwright checks hydration errors, same-document navigation, heading focus, metadata updates, browser history, deep-link refresh and 404 responses. Its default local server run does not prove Traefik/Varnish cache behavior or development HMR.
+### Shared Vitest configuration
+
+All three Vitest entry points call `createTestConfig` from `vitest.shared.mjs`.
+The factory loads `vite.config.ts` once per configuration and merges its aliases,
+plugins and compile-time definitions with the suite's test settings. Keep shared
+Vite resolution settings, including the `app` and `server` aliases, in
+`vite.config.ts`; TypeScript `paths` alone do not configure Vitest resolution.
+The React Router build plugin is disabled during Vitest runs by the existing
+`VITEST` guard in the Vite configuration.
+
+The factory owns the Node environment, in-memory SQLite default, mock restoration
+and default five-second test/hook timeouts. Entry points contain only suite-specific
+settings:
+
+- `vitest.config.cjs`: unit and colocated tests, plus coverage settings.
+- `vitest.integration.config.cjs`: local integration tests, with 15-second timeouts.
+- `vitest.stack.config.cjs`: infrastructure tests, with 90-second timeouts.
+
+Each entry point supplies its own complete `test.include` list. Suites do not
+inherit one another's discovery patterns or coverage settings. Add common runner
+settings to the factory instead of duplicating them in the entry points.
+
+To rerun local integration tests against an existing build:
+
+```bash
+npx vitest run -c vitest.integration.config.cjs
+```
+
+Rebuild first when application or build inputs change. Loading the stack
+configuration does not verify that the external preview infrastructure works.
+Paid search-provider checks remain separate: `npm run test:search:live` requires
+provider credentials and is not included in any of these Vitest suites.
+
+Playwright covers sign-in, chat administration, 404 responses and statistics
+collection/delivery, including SPA navigation and browser history. Tests use
+neutral fixtures or the current configuration rather than fixed site domains,
+branding, article titles or commit IDs. The default local server run does not
+prove Traefik/Varnish cache behavior or development HMR.
+
+## Shared model client
+
+`server/llm/client.ts` exports a single `llmClient` for chat, web search and image generation. `complete({ model, messages, ... }, signal)` accepts the model and parameters for each request; the client does not retain history, the selected model or an AbortController between requests. It returns the original Response, preserving the stream, HTTP status, headers and error body for the calling code's existing diagnostics.
+
+All requests use the server-side `CHAT_API_BASE_URL` and `CHAT_API_KEY`. The URL is required: there is no implicit fallback to another provider. `CHAT_MODEL` specifies the chat model; `CHAT_WEB_SEARCH_MODEL` allows a different search model to be selected, falling back to the chat model when empty. `CHAT_WEB_SEARCH_TOOL` defaults to `openrouter:web_search` with `engine: native` when unset or empty. For Polza, set `CHAT_API_BASE_URL=https://polza.ai/api/v1`, use a Polza API key and set `CHAT_WEB_SEARCH_TOOL=polza:web_search`; this tool uses Polza search engines, so the client omits `engine: native`. See the [OpenRouter](https://openrouter.ai/docs/guides/features/server-tools/web-search) and [Polza](https://polza.ai/docs/gaidy/server-tools) tool documentation. Native search capabilities depend on the model and endpoint; OpenRouter may fall back to another engine for unsupported models. Image generation passes its own model from the incoming GraphQL request and uses the same URL and key; the former OPENROUTER_API_URL and OPENROUTER_API_KEY are no longer used. The legacy GraphQL provider name OPENROUTER is retained for client compatibility and does not determine the API URL.
+
+## Database
+
+The server uses Knex with SQLite (better-sqlite3) or PostgreSQL (pg). Select the
+backend through environment variables; application queries and APIs are shared.
+
+SQLite, the default for small sites:
+
+```dotenv
+DATABASE_CLIENT=sqlite
+DATABASE_FILENAME=server/database/data/database.sqlite
+```
+
+PostgreSQL, with Node running on the host and database port 5432 published:
+
+```dotenv
+DATABASE_CLIENT=pg
+DATABASE_URL=postgresql://postgres:password@127.0.0.1:5432/postgres
+```
+
+For Node running inside Docker, use the actual full database container name,
+for example `website_template-supabase-1`, instead of `127.0.0.1`. Match the
+credentials and database name to the PostgreSQL container configuration and
+URL-encode special characters in credentials. The Docker environment examples
+are in `docker/.env.example`. `DATABASE_URL` is required only for `pg`;
+`DATABASE_FILENAME` applies only to SQLite.
+
+Changing the backend does not transfer data. To start with a clean PostgreSQL
+installation, start its container, set the environment, run `npm run db:migrate`,
+and restart the app. If the PostgreSQL database does not exist, the app connects
+to the maintenance database `postgres` with the same credentials and creates the
+configured database before migrations. The role needs CONNECT access to `postgres`
+and CREATEDB (or superuser) privileges. Existing databases do not require CREATEDB.
+Authentication and other connection failures are reported without attempting creation.
+The HTTP server also applies pending migrations before
+accepting requests. Both commands must run from the project root. In Docker,
+run `npm run db:migrate` inside the app container using its configured environment.
+
+### Migrations
+
+Migrations live in `server/database/migrations` as named `.mjs` files with
+`up` and `down` functions. Knex records each completed filename in
+`knex_migrations`; there is no single application schema version.
+
+```bash
+npm run db:make -- add_user_settings
+npm run db:migrate
+npm run db:migrations
+```
+
+Write schema changes with the Knex schema builder and support both backends.
+The initial migration demonstrates date defaults and JSON validation where SQL
+differs. Migration files are shipped in the production image. New files created
+in a running container must also be saved in the source repository.
+
+Keep completed migrations unchanged and present in the repository. After merging
+an upstream change, `db:migrate` applies every missing migration, including a
+file dated earlier than migrations already completed locally. Filenames must be
+unique across forks; use a descriptive feature name with the generated timestamp.
+Knex orders pending files by name, not by a dependency graph. Conflicting schema
+changes or dependencies across branches must be resolved during the merge, and
+both an existing database upgrade and a clean installation should be checked.
+The initial migration intentionally refuses rollback to avoid dropping all data.
+
+Existing SQLite databases use the frozen `server/database/schema.ts` upgrader
+once to reach legacy version 9, then the initial Knex migration adopts their
+schema and preserves records. Add all future changes as migration files; do not
+increment `PRAGMA user_version` or extend the legacy upgrader.
+
+SQLite connections enable WAL, foreign keys and a five-second busy timeout.
+Dates are stored as Unix milliseconds in SQLite and timestamptz in PostgreSQL;
+both return JavaScript Dates. JSON payloads remain validated text, and numeric
+and boolean results are normalized where the drivers differ. Operations that
+need to serialize a read followed by a write acquire a SQLite writer lock or a
+PostgreSQL transaction advisory lock.
+
+SQLite defaults to `server/database/data/database.sqlite`; relative paths resolve
+from the working directory. Docker Compose uses `/app/server/database/data/database.sqlite`
+and mounts the data directory, which must be writable by the container user
+(UID 1000 in the production image). Data and SQLite journal files are excluded
+from Git and Docker build contexts. Back up SQLite with its backup API, or stop
+the server before copying the entire data directory.
+
+The normal test suite uses isolated in-memory SQLite databases. To also run the
+PostgreSQL contract check, supply `TEST_DATABASE_URL` to a PostgreSQL role allowed
+to create databases and temporary test roles, and run
+`npx vitest run server/database/postgres.test.ts`.
+It creates and drops its own randomly named database; it does not migrate the
+database named in that URL.
+
+### First administrator
+
+Run from the project directory:
+
+```bash
+ADMIN_PASSWORD='your-password' npm run user:create-admin -- --username admin --email admin@example.com
+```
+
+Alternatively, use `--password-stdin` to read the password from standard input.
+The script creates an active user with `sudo = true` and a bcrypt password hash.
+It initializes a new database if necessary. If **any user** already exists,
+it exits with code 1 without adding or changing users. The emptiness check and
+insert run in one transaction with a write lock (SQLite) or an advisory lock
+(PostgreSQL), including for concurrent CLI runs.
+`--database <path>` overrides the SQLite file for isolated environments;
+`--help` lists the options. The script uses Node.js 22.22.3+ and is also included
+in the production image (`npm run user:create-admin -- --username admin`).
+
+### Chat persistence
+
+Chat dialogues, messages (including tool logs, errors, token usage and page URLs),
+and the signing key use the same configured database. The REST and GraphQL APIs
+and guest token format are unchanged. Each appended message and its index data
+are stored in a single row; history is read in insertion order. Tool messages
+remain visible only in administrator history and are excluded from the message index.
+Unknown success status and missing usage counters remain distinct from false and zero.
+
+## Server-side feedback form
+
+The `submitFeedback(data: { token, contacts, message })` mutation is defined in `server/schema/types/ChatMessage/resolvers/submitFeedback.ts`. Message processing and SMTP delivery are implemented in `server/schema/types/ChatMessage/helpers/feedback.ts`, without app dependencies. Contacts are accepted as free text. The client requests a dialogue token immediately before submission, after a five-second delay from opening the form.
+
+Email uses the shared `MAIL_FROM`, `MAIL_TO`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, and `SMTP_REQUIRE_TLS` settings from `docker/.env.example`. If `MAIL_TO` is not set, notifications go to `MAIL_FROM`. The shared `sendEmail` function in `ChatMessage/helpers/sendEmail.ts` accepts the recipient, subject, and text. Without `SMTP_HOST`, it uses the recipient's MX records. Disable required TLS for local MailHog. The `FEEDBACK_*` variables are no longer needed. The site address comes from Origin, falling back to the request protocol and Host, and is used only in the notification text.
+
+Form success means the message was saved in the dialogue. Email notification starts after saving and does not delay the visitor's response. Missing email configuration and SMTP errors are logged on the server but do not turn an accepted submission into a failure. Delivery has no queue or automatic retries; stopping the process can interrupt it, while the saved dialogue remains available in the admin panel. Retrying with the same token creates neither another message nor another notification, including after a process restart.
+
+Tokens are signed with the chat key; dialogues are stored in SQLite. Rate limits are kept in process memory and apply to the connection address. Behind a proxy, visitors may share these limits: the service does not trust arbitrary X-Forwarded-For values.
+
+### Feedback dialogues
+
+The existing `AppContext` controls opening the form through `isFeedbackOpen`, `openFeedback`, and `closeFeedback`. `FeedbackForm` is rendered in Layout; fields, timing, and submission remain inside the form. On opening, `useEffect` records the opening time in component state. Before five seconds have elapsed, submission shows an alert with the remaining time without calling the API. After five seconds, the form obtains `createChatToken(data: { channel: feedback })` and immediately calls `submitFeedback`. Retries within the same open form reuse the token. This is a simple client-side delay; the server still validates the token signature, channel, and submission rate.
+
+A dialogue has a `chat` or `feedback` channel, exposed in the API and admin card. SQLite migration version 3 assigns `chat` to existing dialogues while preserving history. The form message and contacts are saved as a `user` message without an agent reply before email delivery. SMTP failure does not delete the message; retries with the same token do not duplicate it. Dialogue tokens do not expire, matching existing chat tokens. The separate `prepareFeedback` mutation is no longer used.
+
+## Error propagation contract
+
+At every server stage, failures must have readable, actionable messages. Raise failures with `throw new Error(message)` and preserve the original error message across HTTP, streaming, and GraphQL boundaries. GraphQL must expose it in `errors[].message`; do not replace an available server explanation with a generic HTTP status or an unspecified internal error. Keep existing diagnostic logs and error causes.
+
+Domain validation belongs to the service that owns the operation. The GraphQL chat proxy forwards inputs accepted by the GraphQL schema without adding token or message validation. `/api/chat` validates the required token regardless of the caller and distinguishes a missing or blank token from an invalid token. The browser obtains a token automatically through `createChatToken` before sending its first message; GraphQL callers must obtain and supply it themselves. A required GraphQL `String!` rejects omitted or null values but permits an empty string, which the chat service must reject.
+
+The proxy must preserve errors returned before streaming as well as errors carried inside the stream. Interrupted streams must fail instead of returning a successful partial response. Use a transport-specific fallback only when no readable server message is available. Tests must verify the messages received by callers, including missing, blank, and invalid chat tokens and HTTP/stream failures.
+
+README documentation must be written in English.
+
+Transport errors raised before the chat returns an HTTP response (such as invalid header characters or a connection failure) are logged in full on the server. The GraphQL caller receives a readable general request error instead of low-level fetch details. Keep the chat token in the Authorization header, not in the JSON request body. Errors returned by the chat itself retain their original messages.
+
+### User pages
+
+`/users` and `/users/:userId` use React Router loaders, Apollo operations from
+`app/gql/src`, and colocated Linaria styles. The `/signup` page supports password registration with the configured invitation
+policy and `USER_DEFAULT_STATUS` (default `active`). Profiles support editing, avatars,
+Markdown, administrator status changes and invitations. Invitations use
+`REFERRER_TOKEN_TTL` (default `1h`) and the existing `JWT_SECRET`.
+
+SQLite schema version 4 adds the transaction ledger, unique blockchain payment
+records, and a Telegram account identifier. Existing users and balances are
+preserved. The migration runs when the database opens.
+
+Optional integrations retain the original environment names:
+
+- `NEXT_PUBLIC_CRYPTO_ENABLED=true` exposes balances, transfers and top-ups.
+- `CRYPTO_CHAIN_ID`, `CRYPTO_RPC_URL`, `CRYPTO_USDT_CONTRACT_ADDRESS` and
+  `PAYMENT_RECIPIENT_ADDRESS` configure USDT payments (six token decimals).
+  The wallet switches to the chain returned by the server. Credits require two
+  confirmations, the configured token and recipient, and the linked sender.
+- `NEXT_PUBLIC_TELEGRAM_BOT_NAME` exposes the Telegram login widget;
+  `TELEGRAM_BOT_TOKEN` stays on the server and verifies its signed payload.
+  The bot's login domain must be configured in Telegram.
+
+Public flags are embedded during the Vite build; rebuild after changing them.
+Pending top-up details are retained in the browser so verification can be retried
+without sending another payment. These integrations require configured services;
+local tests do not establish successful live wallet or Telegram login behavior.

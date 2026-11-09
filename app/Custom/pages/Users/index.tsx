@@ -1,0 +1,42 @@
+import type * as React from 'react'
+import { Link, useLoaderData } from 'react-router'
+import { useUsersConnectionQuery } from 'app/gql/generated'
+import { useAppContext } from 'app/Custom/components/AppContext'
+import { CustomLayoutSectionStyled } from 'app/Custom/Layout/styles'
+import { UsersView } from './View'
+import { getUsersQueryVariables } from './helpers'
+import type { usersPageGetInitialProps } from './usersPageGetInitialProps'
+export const UsersPage: React.FC = () => {
+  const { page, search } = useLoaderData<typeof usersPageGetInitialProps>()
+  const { user, userLoading = true } = useAppContext() ?? {}
+  const { data, loading, error } = useUsersConnectionQuery({
+    ssr: false,
+    fetchPolicy: 'network-only',
+    skip: userLoading || user?.sudo !== true,
+    variables: getUsersQueryVariables({ currentUser: user, page, search }),
+  })
+  return (
+    <CustomLayoutSectionStyled>
+      {userLoading ? (
+        <p role="status">Проверка доступа…</p>
+      ) : user?.sudo !== true ? (
+        <p>
+          Доступ разрешён только администраторам.{' '}
+          {!user && <Link to="/signin">Войти</Link>}
+        </p>
+      ) : error ? (
+        <p role="alert">Не удалось загрузить пользователей: {error.message}</p>
+      ) : loading && !data ? (
+        <p role="status">Загрузка…</p>
+      ) : (
+        <UsersView
+          users={data?.users ?? []}
+          count={data?.usersCount ?? 0}
+          limit={10}
+          page={page}
+          search={search}
+        />
+      )}
+    </CustomLayoutSectionStyled>
+  )
+}
